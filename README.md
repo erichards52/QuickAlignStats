@@ -44,7 +44,7 @@ mean_prob = sum_prob / len(quality)
 LOOKUP = [pow(10, -0.1 * q) for q in range(100)]
 ```
 
-## Calculation for mean and median alignment qualities
+## Calculation for mean and median alignment accuracy
 ```
 alignQuals=[]
 
