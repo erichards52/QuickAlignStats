@@ -13,14 +13,12 @@ Simplying run the script by calling `python quickAlStats.py ${path/to/bamfile}`
 ```
 qualityList=[]
 
-quality = read.query_alignment_qualities
+quality = read.query_qualities
 sum_prob = 0.0
-for score in quality:
-    sum_prob += LOOKUP[score]
-qualityList.append(score)
-mean_prob = sum_prob / len(quality)
+if quality:
+    mq = -10 * log(sum([tab[q] for q in quality]) / len(quality), 10)
+    qualityList.append(mq)
 
-LOOKUP = [pow(10, -0.1 * q) for q in range(100)]
 ```
 
 ## Calculation for mean and median alignment accuracy
