@@ -21,7 +21,6 @@ alignedbps=0
 supplealignedbps=0
 readLenList=[]
 qualityList=[]
-LOOKUP = [pow(10, -0.1 * q) for q in range(100)]
 alignQuals=[]
 percentIdent=0.0
 
@@ -71,7 +70,6 @@ for read in bamfile.fetch():
         if quality:
             mq = -10 * log(sum([tab[q] for q in quality]) / len(quality), 10)
             qualityList.append(mq)
-        mean_prob = sum_prob / len(quality)
 
         
     if read.is_unmapped:
