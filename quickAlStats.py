@@ -3,6 +3,7 @@ import pysam
 import numpy as np
 import math
 import sys
+from math import log
 
 # Define variables
 bamName=sys.argv[1]
@@ -23,6 +24,12 @@ qualityList=[]
 LOOKUP = [pow(10, -0.1 * q) for q in range(100)]
 alignQuals=[]
 percentIdent=0.0
+
+def errs_tab(n):
+    """Generate list of error rates for qualities less than equal than n."""
+    return [10**(q / -10) for q in range(n+1)]
+
+tab=errs_tab(128)
 
 # Import BAM file
 bamfile = pysam.AlignmentFile(bamName, "rb")
@@ -58,7 +65,13 @@ for read in bamfile.fetch():
         matches = el_count[0] - mismatches
         accuracy = float(matches) / (matches + nm) * 100
         alignQuals.append(accuracy)
-
+        # Calculate quality
+        quality = read.query_qualities
+        sum_prob = 0.0
+        if quality:
+            mq = -10 * log(sum([tab[q] for q in quality]) / len(quality), 10)
+            qualityList.append(mq)
+        mean_prob = sum_prob / len(quality)
 
         
     if read.is_unmapped:
@@ -73,14 +86,6 @@ for read in bamfile.fetch():
         primaryReads += 1
         primaryBps += read.query_length
         alignedbps += read.query_alignment_length
-
-        # Calculate quality
-        quality = read.query_alignment_qualities
-        sum_prob = 0.0
-        for score in quality:
-            sum_prob += LOOKUP[score]
-        qualityList.append(score)
-        mean_prob = sum_prob / len(quality)
 
 # Perform calculations to return relevant statistics
 medPercentIdent = np.median(alignQuals)        
@@ -106,10 +111,10 @@ print("Unmapped Base Pairs: " + str(unmappedbps))
 print("Aligned Base Pairs: " + str(alignedbps))
 print("Aligned Supplementary Base Pairs: " + str(supplealignedbps))
 print("Total Aligned Base Pairs: " + str(totalAligned))
-print("Mean Read Length: " + str(meanReadLen))
+print("Mean Read Length: " + str(round(meanReadLen,1)))
 print("Median Read Length: " + str(medianReadLen))
 print("Mean Read Quality (Equivalent of NanoPlot Median Read Quality): " + str(round(meanReadQual,1)))
-print("Median Read Quality: " + str(medianReadQual))
+print("Median Read Quality: " + str(round(medianReadQual,1)))
 print("N50: " + str(n50))
 print("Median Percent Identity: " + str(round(medPercentIdent,1)))
 print("Mean Percent Identity: " + str(round(meanPercentIdent,1)))
