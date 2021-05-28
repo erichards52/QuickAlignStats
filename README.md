@@ -1,9 +1,6 @@
 # QuickAlStats
 
-## IN ORDER TO MAINTAIN CONTINUITY WITH NANOPLOT:
-## READ LENGTH AND ACCURACY IS CALCULATED USING ANY READS THAT ARE MAPPED (PRIMARY + SUPPLEMENTARY)
-
-## QUALITY IS CALCULATED USING ONLY PRIMARY READS
+## In accordance with NanoPlot, read length, accuracy and quality is calculated using primary and supplementary reads
 
 Quick and dirty Python script which returns alignment metrics from a BAM file
 
