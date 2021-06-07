@@ -4,9 +4,16 @@ import numpy as np
 import math
 import sys
 from math import log
+from pathlib import Path
+
+bamName=sys.argv[1]
+path = Path(bamName)
+svPath = path.parent.absolute()
+path = svPath.parent.absolute()
+
+sys.stdout = open(str(path) + '/quickAlStats/quickAlStats.txt', 'w')
 
 # Define variables
-bamName=sys.argv[1]
 readCount=0
 unmappedCount=0
 suppleCount=0
@@ -111,8 +118,10 @@ print("Aligned Supplementary Base Pairs: " + str(supplealignedbps))
 print("Total Aligned Base Pairs: " + str(totalAligned))
 print("Mean Read Length: " + str(round(meanReadLen,1)))
 print("Median Read Length: " + str(medianReadLen))
-print("Mean Read Quality (Equivalent of NanoPlot Median Read Quality): " + str(round(meanReadQual,1)))
+print("Mean Read Quality: " + str(round(meanReadQual,1)))
 print("Median Read Quality: " + str(round(medianReadQual,1)))
 print("N50: " + str(n50))
 print("Median Percent Identity: " + str(round(medPercentIdent,1)))
 print("Mean Percent Identity: " + str(round(meanPercentIdent,1)))
+
+sys.stdout.close()
