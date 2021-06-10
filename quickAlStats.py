@@ -3,15 +3,19 @@ import pysam
 import numpy as np
 import math
 import sys
+import os
 from math import log
 from pathlib import Path
 
 bamName=sys.argv[1]
+bamBase = os.path.basename(bamName)
+bamBase = bamBase.replace(".bam","_")
+print(bamBase)
 path = Path(bamName)
 svPath = path.parent.absolute()
 path = svPath.parent.absolute()
 
-sys.stdout = open(str(path) + '/quickAlStats/quickAlStats.txt', 'w')
+sys.stdout = open(str(path) + '/quickAlStats/' + bamBase + 'quickAlStats.txt', 'w')
 
 # Define variables
 readCount=0
