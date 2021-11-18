@@ -1,3 +1,4 @@
+#!/resources/tools/apps/software/lang/Python/3.7.4-GCCcore-8.3.0/bin/python
 # Import libraries
 import pysam
 import numpy as np
@@ -8,14 +9,6 @@ from math import log
 from pathlib import Path
 
 bamName=sys.argv[1]
-bamBase = os.path.basename(bamName)
-bamBase = bamBase.replace(".bam","_")
-print(bamBase)
-path = Path(bamName)
-svPath = path.parent.absolute()
-path = svPath.parent.absolute()
-
-sys.stdout = open(str(path) + '/quickAlStats/' + bamBase + 'quickAlStats.txt', 'w')
 
 # Define variables
 readCount=0
@@ -34,9 +27,9 @@ readLenList=[]
 qualityList=[]
 alignQuals=[]
 percentIdent=0.0
+qualityListPrim=[]
 
 def errs_tab(n):
-    """Generate list of error rates for qualities less than equal than n."""
     return [10**(q / -10) for q in range(n+1)]
 
 tab=errs_tab(128)
@@ -95,6 +88,12 @@ for read in bamfile.fetch():
         primaryReads += 1
         primaryBps += read.query_length
         alignedbps += read.query_alignment_length
+        qualityPrim = read.query_qualities
+        sum_prob = 0.0
+        if qualityPrim:
+            mqPrim = -10 * log(sum([tab[q] for q in qualityPrim]) / len(qualityPrim), 10)
+            qualityListPrim.append(mqPrim)
+
 
 # Perform calculations to return relevant statistics
 medPercentIdent = np.median(alignQuals)        
@@ -104,6 +103,8 @@ meanReadLen = np.mean(readLenList)
 medianReadLen = np.median(readLenList)
 meanReadQual = np.mean(qualityList)
 medianReadQual = np.median(qualityList)
+minReadQual = np.amin(qualityListPrim)
+maxReadQual = np.amax(qualityListPrim)
 readLenList.sort()
 n50 = readLenList[np.where(np.cumsum(readLenList) >= 0.5 * np.sum(readLenList))[0][0]]
 
@@ -124,8 +125,8 @@ print("Mean Read Length: " + str(round(meanReadLen,1)))
 print("Median Read Length: " + str(medianReadLen))
 print("Mean Read Quality: " + str(round(meanReadQual,1)))
 print("Median Read Quality: " + str(round(medianReadQual,1)))
+print("Lowest Average Read Quality: " + str(round(minReadQual,1)))
+print("Highest Average Read Quality: " + str(round(maxReadQual,1)))
 print("N50: " + str(n50))
 print("Median Percent Identity: " + str(round(medPercentIdent,1)))
 print("Mean Percent Identity: " + str(round(meanPercentIdent,1)))
-
-sys.stdout.close()
