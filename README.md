@@ -1,4 +1,4 @@
-# QuickAlStats
+# QuickAlignStats
 
 ## In accordance with NanoPlot, read length, accuracy and quality is calculated using primary and supplementary reads
 
