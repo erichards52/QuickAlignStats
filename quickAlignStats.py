@@ -26,6 +26,10 @@ supplealignedbps=0
 readLenList=[]
 qualityList=[]
 alignQuals=[]
+alignQualsSNV=[]
+alignQualsDel=[]
+alignQualsIns=[]
+alignQualsNn=[]
 percentIdent=0.0
 qualityListPrim=[]
 
@@ -36,7 +40,7 @@ tab=errs_tab(128)
 
 # Import BAM file
 bamfile = pysam.AlignmentFile(bamName, "rb")
-
+    
 # Look for unmapped reads (ONLY WORKS IN THIS LOOP W/ PYSAM UNTIL_EOF
 for r in bamfile.fetch(until_eof=True):
     if r.is_unmapped:
@@ -55,19 +59,27 @@ for read in bamfile.fetch():
         pass
     else:
         # Calculate accuracy
-        el_count = [0] * 10
-        for el in read.cigartuples:
-            el_count[el[0]] += el[1]
-        nn = 0
-        if read.has_tag("nn"):
-            nn = read.get_tag("nn")
-        nm = read.get_tag("NM")
-        dels = el_count[2]
-        ins = el_count[1]
+        cig_stats_counts = read.get_cigar_stats()[0]
+        try:
+            nn = read.get_tag('nn')
+        except KeyError:
+            nn = 0
+        nm = cig_stats_counts[10]
+        ins = cig_stats_counts[1]
+        dels = cig_stats_counts[2]
         mismatches = nm - dels - ins - nn
-        matches = el_count[0] - mismatches
-        accuracy = float(matches) / (matches + nm) * 100
+        matches = cig_stats_counts[0] - mismatches
+        accuracy = matches / (matches + nm) * 100
         alignQuals.append(accuracy)
+        # Accuracy only SNVs/mismatches and no deletions and insertions
+        accuracy_SNV = float(mismatches) / (matches + nm) * 100
+        accuracy_Del = float(dels) / (matches + nm) * 100
+        accuracy_Ins = float(ins) / (matches + nm) * 100
+        accuracy_Nn = float(nn) / (matches + nm) * 100
+        alignQualsSNV.append(accuracy_SNV)
+        alignQualsDel.append(accuracy_Del)
+        alignQualsNn.append(accuracy_Nn)
+        alignQualsIns.append(accuracy_Ins)
         # Calculate quality
         quality = read.query_qualities
         sum_prob = 0.0
@@ -96,6 +108,15 @@ for read in bamfile.fetch():
 
 
 # Perform calculations to return relevant statistics
+
+medPercentIdentIns = np.median(alignQualsIns)
+meanPercentIdentIns = np.mean(alignQualsIns)
+medPercentIdentNn = np.median(alignQualsNn)
+meanPercentIdentNn = np.mean(alignQualsNn)
+medPercentIdentDel = np.median(alignQualsDel)
+meanPercentIdentDel = np.mean(alignQualsDel)
+medPercentIdentSNV = np.median(alignQualsSNV)
+meanPercentIdentSNV = np.mean(alignQualsSNV)
 medPercentIdent = np.median(alignQuals)        
 meanPercentIdent = np.mean(alignQuals)
 totalAligned = alignedbps + supplealignedbps
@@ -128,5 +149,13 @@ print("Median Read Quality: " + str(round(medianReadQual,1)))
 print("Lowest Average Read Quality: " + str(round(minReadQual,1)))
 print("Highest Average Read Quality: " + str(round(maxReadQual,1)))
 print("N50: " + str(n50))
-print("Median Percent Identity: " + str(round(medPercentIdent,1)))
-print("Mean Percent Identity: " + str(round(meanPercentIdent,1)))
+print("Median Percent Identity: " + str(round(medPercentIdent,4)))
+print("Mean Percent Identity: " + str(round(meanPercentIdent,4)))
+print("Median SNV Error Rate: " + str(round(medPercentIdentSNV,4)))
+print("Mean SNV Error Rate: " + str(round(meanPercentIdentSNV,4)))
+print("Median INS Error Rate: " + str(round(medPercentIdentIns,4)))
+print("Mean INS Error Rate: " + str(round(meanPercentIdentIns,4)))
+print("Median DEL Error Rate: " + str(round(medPercentIdentDel,4)))
+print("Mean DEL Error Rate: " + str(round(meanPercentIdentDel,4)))
+print("Median NN Error Rate: " + str(round(medPercentIdentNn,4)))
+print("Mean NN Error Rate: " + str(round(meanPercentIdentNn,4)))
