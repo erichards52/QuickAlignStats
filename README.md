@@ -8,7 +8,7 @@ Quick and dirty Python script which returns alignment metrics from a BAM file
 
 ## How to use
 
-MAKE SURE YOU ARE CURRENTLY IN AN INTERACTIVE JOB OR SUBMIT THIS AS AN LSF JOB TO A QUEUE WITH >20000 MB MEMORY AVAILABLE (i.e.: bsub -R rusage[mem>20000] select[mem=20000] -M 2000 -P bio -q pipeline)
+MAKE SURE YOU ARE CURRENTLY IN AN INTERACTIVE JOB OR SUBMIT THIS AS AN LSF JOB TO A QUEUE WITH >20000 MB MEMORY AVAILABLE (i.e.: bsub -R rusage[mem>20000] select[mem=20000] -M 20000 -P bio -q pipeline)
 
 Simply run the script by calling `./quickAlignStats.py ${path/to/bamfile}` or `./quickAlignStats_Per_Alignment.py ${path/to/bamfile}`.
 
