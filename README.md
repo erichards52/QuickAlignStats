@@ -4,7 +4,13 @@
 
 Quick and dirty Python script which returns alignment metrics from a BAM file
 
-Simplying run the script by calling `python quickAlStats.py ${path/to/bamfile}`
+## How to use
+
+Simply run the script by calling `./quickAlignStats.py ${path/to/bamfile}` or `./quickAlignStats_Per_Alignment.py ${path/to/bamfile}`.
+
+If you want to perform this for multiple bamfiles, use the `stats_call.sh` script (make sure the correct quickAlignStats python script is being used as to whether you want per alignment metrics or not):
+
+`./stats_call.sh ${path/to/project/or/experiment/id}`
 
 ## Returns:
 #### Total/Mapped Reads, Unmapped Reads, Primary Reads, Supplementary Reads, Secondary Reads, Total Base pairs, Primary Base Pairs, Supplementary Base Pairs, Unmapped Base Pairs, Aligned Base Pairs, Aligned Supplementary Base Pairs, Total Aligned Base Pairs, Mean Read Length, Median Read Length, Mean Read Quality, Median Read Quality, N50, Median Percent Identity, Mean Percent Identity
