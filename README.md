@@ -12,7 +12,7 @@ MAKE SURE YOU ARE CURRENTLY IN AN INTERACTIVE JOB OR SUBMIT THIS AS AN LSF JOB T
 
 Simply run the script by calling `./quickAlignStats.py ${path/to/bamfile}` or `./quickAlignStats_Per_Alignment.py ${path/to/bamfile}`.
 
-If you want to perform this for multiple bamfiles or even a single bamfile, use the `stats_call.sh` script as this already has the correct bsub/LSF parameters set and can be directed down to the SV_workflow directory level (make sure the correct quickAlignStats python script is being used as to whether you want per alignment metrics or not, you can just replace the name of the scripts interchangably):
+If you want to perform this for multiple bamfiles or even a single bamfile, use the `stats_call.sh` script as this already has the correct bsub/LSF parameters set and can be directed down to the SV_workflow directory level (make sure the correct quickAlignStats python script is being used as to whether you want per alignment metrics or not, you can just replace the name of the scripts interchangably as shown above):
 
 `./stats_call.sh ${path/to/project/experiment/flowcell/id/or/SV_workflow/directory}`
 
