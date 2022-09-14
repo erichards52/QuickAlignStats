@@ -12,9 +12,9 @@ MAKE SURE YOU ARE CURRENTLY IN AN INTERACTIVE JOB OR SUBMIT THIS AS AN LSF JOB T
 
 Simply run the script by calling `./quickAlignStats.py ${path/to/bamfile}` or `./quickAlignStats_Per_Alignment.py ${path/to/bamfile}`.
 
-If you want to perform this for multiple bamfiles, use the `stats_call.sh` script (make sure the correct quickAlignStats python script is being used as to whether you want per alignment metrics or not):
+If you want to perform this for multiple bamfiles or even a single bamfile, use the `stats_call.sh` script as this already has the correct bsub/LSF parameters set and can be directed down to the SV_workflow directory level (make sure the correct quickAlignStats python script is being used as to whether you want per alignment metrics or not):
 
-`./stats_call.sh ${path/to/project/or/experiment/id}`
+`./stats_call.sh ${path/to/project/experiment/flowcell/id/or/SV_workflow/directory}`
 
 ## Returns:
 #### Total/Mapped Reads, Unmapped Reads, Primary Reads, Supplementary Reads, Secondary Reads, Total Base pairs, Primary Base Pairs, Supplementary Base Pairs, Unmapped Base Pairs, Aligned Base Pairs, Aligned Supplementary Base Pairs, Total Aligned Base Pairs, Mean Read Length, Median Read Length, Mean Read Quality, Median Read Quality, N50, Median Percent Identity, Mean Percent Identity
