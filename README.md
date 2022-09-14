@@ -2,7 +2,7 @@
 
 ## In accordance with NanoPlot, read length, accuracy and quality is calculated using primary and supplementary reads
 
-An up-to-date version of this script can be found at https://gitlab.com/genomicsengland/bio-pipelines/long-reads-qc/-/blob/master/bin/quick_aln_stats.py.
+An up-to-date version of this script by Arthur Gymer can be found at https://gitlab.com/genomicsengland/bio-pipelines/long-reads-qc/-/blob/master/bin/quick_aln_stats.py. I do not have a usage tutorial for that script though.
 
 Quick and dirty Python script which returns alignment metrics from a BAM file
 
